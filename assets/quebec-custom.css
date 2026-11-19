@@ -1,0 +1,45 @@
+/* ===== Quebec store – custom styles (navy + green) ===== */
+:root { --qc-navy: #0B1F3A; --qc-tint: #EEF2F8; --qc-green: #1E8E3E; --qc-green-dark: #17742F; --qc-red: #C8102E; }
+
+/* --- Product page: tighter spacing --- */
+.product-info { --product-info-block-spacing: 0.9rem; }
+.product-info__title, .product-info__price, .product-info__badge-list { --product-info-block-spacing: 0.4rem; }
+.product-info .product-info__title { line-height: 1.15; }
+.product-info .eusplist-wrapper, .product-info .eanniv-box { margin-top: 0; }
+.product-info .accordion { --accordion-spacing: 0.9rem; }
+
+/* --- Add to cart: big, green, confident --- */
+.product-info .buy-buttons .button[type="submit"],
+.product-quick-add .button[type="submit"] {
+  background: var(--qc-green) !important;
+  border-color: var(--qc-green) !important;
+  color: #fff !important;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 700;
+  min-height: 56px;
+  box-shadow: 0 6px 16px rgba(30,142,62,.28);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.product-info .buy-buttons .button[type="submit"]:hover,
+.product-quick-add .button[type="submit"]:hover {
+  background: var(--qc-green-dark) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(30,142,62,.35);
+}
+.product-info .buy-buttons .button[type="submit"][disabled] {
+  background: #9AA5B5 !important; border-color: #9AA5B5 !important; box-shadow: none;
+}
+
+/* --- Urgency: low stock --- */
+.qc-stock { display:flex; align-items:center; gap:8px; margin:0; font-size:13.5px; font-weight:500; color: var(--qc-red); }
+.qc-stock__dot { width:9px; height:9px; border-radius:50%; background: var(--qc-red); box-shadow:0 0 0 0 rgba(200,16,46,.5); animation: qc-pulse 1.8s infinite; flex-shrink:0; }
+@keyframes qc-pulse { 0%{box-shadow:0 0 0 0 rgba(200,16,46,.5)} 70%{box-shadow:0 0 0 8px rgba(200,16,46,0)} 100%{box-shadow:0 0 0 0 rgba(200,16,46,0)} }
+
+/* --- Shipping bar + promo box in navy style --- */
+.eshipbar-bar { background: var(--qc-tint) !important; color: var(--qc-navy) !important; box-shadow: none !important; border: 1px solid #D5DEEC; }
+.eanniv-box { border-left-color: var(--qc-navy) !important; border-radius: 0 6px 6px 0; }
+.eanniv-box strong { color: var(--qc-red); }
+
+
+@media (prefers-reduced-motion: reduce) { .qc-stock__dot { animation: none; } }
