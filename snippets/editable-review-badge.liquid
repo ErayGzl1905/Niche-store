@@ -1,0 +1,67 @@
+<div class="erbadge-wrapper">
+  <div 
+    class="erbadge-clickable" 
+    onclick="
+      var el = document.getElementById('{{ settings.erbadge_anchor_id }}');
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({ top: top + {{ settings.erbadge_scroll_offset }}, behavior: 'smooth' });
+      }
+    "
+  >
+    
+    <div class="erbadge-image">
+      {% if settings.erbadge_image != blank %}
+        <img 
+          src="{{ settings.erbadge_image | image_url }}" 
+          alt="rating stars"
+          class="erbadge-img-tag"
+        >
+      {% endif %}
+    </div>
+
+    <div class="erbadge-text">
+      {{ settings.erbadge_rating_text }}
+      <span class="erbadge-reviews">
+        {{ settings.erbadge_reviews_text }}
+      </span>
+      {{ settings.erbadge_suffix_text }}
+    </div>
+
+  </div>
+</div>
+
+<style>
+.erbadge-wrapper {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.erbadge-clickable {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #000000;
+}
+
+.erbadge-image {
+  margin-right: 10px;
+}
+
+.erbadge-img-tag {
+  width: 100px;
+  height: auto;
+}
+
+.erbadge-text {
+  font-size: 13px;
+}
+
+.erbadge-reviews {
+  font-weight: bold;
+  text-decoration: underline;
+}
+</style>

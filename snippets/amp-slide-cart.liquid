@@ -1,0 +1,42 @@
+<!-- SLIDE CART EDITS - START -->
+<style>
+  #slidecarthq header.header {
+    justify-content: center;
+    padding: 10px 15px;
+  }
+  #slidecarthq header.header>span {
+    font-size: 0 !important;
+  }
+  #slidecarthq .header>span::before {
+    content: '';
+    display: inline-block;
+    background-image: url("https://cdn.shopify.com/s/files/1/0940/5192/6402/files/logo.png?v=1777137530");
+    width: 175px;
+    height: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: relative;
+    top: 1px;
+  }
+  #slidecarthq .header .cart-count {
+    display: none;
+  }
+  #slidecarthq .header button {
+    position: absolute;
+    right: 15px;
+  }
+</style>
+<script>
+  window.SLIDECART_ADD_TO_CART = function({ id, quantity }) {
+    if(!window.ShopifyAnalytics) {
+      console.log("Shopify Analytics for SC not found");
+      return;
+    }
+
+    window.ShopifyAnalytics.lib.track("Added Product", {
+      id,
+      quantity
+    });
+  }
+</script>
+<!-- SLIDE CART EDITS - END -->

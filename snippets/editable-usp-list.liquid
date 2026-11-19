@@ -1,0 +1,92 @@
+<div class="eusplist-wrapper">
+  <ul class="eusplist-list" aria-label="Shop guarantees">
+
+    <li class="eusplist-item">
+      {% if settings.eusplist_icon_1 != blank %}
+        <img class="eusplist-icon eusplist-icon-1"
+          src="{{ settings.eusplist_icon_1 | image_url }}"
+          alt=""
+          loading="lazy"
+          decoding="async">
+      {% endif %}
+      <span class="eusplist-text eusplist-text-1">
+        {{ settings.eusplist_text_1 }}
+      </span>
+    </li>
+
+    <li class="eusplist-item">
+      {% if settings.eusplist_icon_2 != blank %}
+        <img class="eusplist-icon eusplist-icon-2"
+          src="{{ settings.eusplist_icon_2 | image_url }}"
+          alt=""
+          loading="lazy"
+          decoding="async">
+      {% endif %}
+      <span class="eusplist-text eusplist-text-2">
+        {{ settings.eusplist_text_2 }}
+      </span>
+    </li>
+
+    <li class="eusplist-item">
+      {% if settings.eusplist_icon_3 != blank %}
+        <img class="eusplist-icon eusplist-icon-3"
+          src="{{ settings.eusplist_icon_3 | image_url }}"
+          alt=""
+          loading="lazy"
+          decoding="async">
+      {% endif %}
+      <span class="eusplist-text eusplist-text-3">
+        {{ settings.eusplist_text_3 }}
+      </span>
+    </li>
+
+  </ul>
+</div>
+
+<style>
+/* --- ICON ALIGNMENT (UNCHANGED) --- */
+.eusplist-icon-1 { transform: translateX({{ settings.eusplist_icon_offset_1 }}px); }
+.eusplist-icon-2 { transform: translateX({{ settings.eusplist_icon_offset_2 }}px); }
+.eusplist-icon-3 { transform: translateX({{ settings.eusplist_icon_offset_3 }}px); }
+
+/* --- TEXT ALIGNMENT (UNCHANGED) --- */
+.eusplist-text-1 { transform: translateX({{ settings.eusplist_text_offset_1 }}px); }
+.eusplist-text-2 { transform: translateX({{ settings.eusplist_text_offset_2 }}px); }
+.eusplist-text-3 { transform: translateX({{ settings.eusplist_text_offset_3 }}px); }
+
+/* --- GENERAL STYLES (EXACT SAME) --- */
+.eusplist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font: inherit;
+  color: inherit;
+}
+
+.eusplist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.3;
+  font-size: 1rem;
+}
+
+.eusplist-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.eusplist-text {
+  font: inherit;
+  color: inherit;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  display: inline-block;
+}
+</style>

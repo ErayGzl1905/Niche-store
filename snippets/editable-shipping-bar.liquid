@@ -1,0 +1,118 @@
+<div class="eshipbar-wrapper">
+  <div class="eshipbar-bar">
+    
+    <div class="eshipbar-left">
+      <svg class="eshipbar-dot" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12 12" fill="none">
+        <circle cx="6" cy="6" r="5.5" fill="{{ settings.eshipbar_dot_color }}"></circle>
+      </svg>
+
+      <span>
+        <span class="eshipbar-cd-wrap" hidden>Commandez d'ici <strong id="eshipbar-cd" class="eshipbar-cd"></strong>,</span>
+        <span class="eshipbar-cd-lead">{{ settings.eshipbar_left_text_before }}</span><span class="eshipbar-cd-alt" hidden>expédié le</span>
+        <span id="eshipbar-date" class="eshipbar-date" style="font-weight: 600;"></span>
+        {{ settings.eshipbar_left_text_after }}
+      </span>
+    </div>
+
+    <div class="eshipbar-right">
+      <span>
+        {{ settings.eshipbar_flag }} 
+        <strong>{{ settings.eshipbar_right_bold }}</strong> 
+        {{ settings.eshipbar_right_text }}
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.eshipbar-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: {{ settings.eshipbar_bg_color }};
+  padding: 8px 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  font-size: 13px;
+  color: {{ settings.eshipbar_text_color }};
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.eshipbar-cd { color: #C8102E; font-variant-numeric: tabular-nums; }
+.eshipbar-left,
+.eshipbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.eshipbar-dot {
+  flex-shrink: 0;
+  animation: eshipbar-breathe 2.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes eshipbar-breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.1); opacity: 0.8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eshipbar-dot { animation: none; }
+}
+
+@media (max-width: 600px) {
+  .eshipbar-bar {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+}
+</style>
+
+<script>
+function eshipbarGetNextShippingDate() {
+  const timeZone = "{{ settings.eshipbar_timezone }}";
+
+  const parts = new Intl.DateTimeFormat("{{ settings.eshipbar_locale }}", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+
+  const get = (type) => parts.find(p => p.type === type)?.value;
+  const year = Number(get("year"));
+  const month = Number(get("month"));
+  const day = Number(get("day"));
+
+  const tomorrowUTC = new Date(Date.UTC(year, month - 1, day + {{ settings.eshipbar_day_offset }}));
+
+  return new Intl.DateTimeFormat("{{ settings.eshipbar_locale }}", {
+    timeZone,
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  }).format(tomorrowUTC);
+}
+
+document.getElementById("eshipbar-date").textContent = eshipbarGetNextShippingDate();
+(function(){
+  var tz = "{{ settings.eshipbar_timezone }}";
+  var el = document.getElementById("eshipbar-cd");
+  if (!el) return;
+  function tick(){
+    var p = new Intl.DateTimeFormat("en-GB",{timeZone:tz,hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).formatToParts(new Date());
+    var g = function(t){ return Number(p.find(function(x){return x.type===t}).value); };
+    var left = 86400 - (g("hour")%24*3600 + g("minute")*60 + g("second"));
+    var h = Math.floor(left/3600), m = Math.floor((left%3600)/60);
+    el.textContent = h + " h " + (m<10?"0":"") + m + " min";
+    document.getElementById("eshipbar-date").textContent = eshipbarGetNextShippingDate();
+  }
+  tick(); setInterval(tick, 30000);
+  document.querySelector(".eshipbar-cd-wrap").hidden = false;
+  document.querySelector(".eshipbar-cd-alt").hidden = false;
+  document.querySelector(".eshipbar-cd-lead").hidden = true;
+})();
+</script>

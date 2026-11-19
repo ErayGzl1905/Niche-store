@@ -1,0 +1,19 @@
+{%- liquid
+  assign low_stock_threshold = 13
+  assign stock_left = product.metafields.custom.stock_left.value
+-%}
+
+{%- if stock_left != blank -%}
+  <div class="stock-status" style="display:flex;align-items:center;gap:8px;margin:12px 0;font-size:14px;font-weight:500;">
+    {%- if stock_left <= 0 -%}
+      <span style="width:10px;height:10px;border-radius:50%;background:#B42318;"></span>
+      <span>Sold out</span>
+    {%- elsif stock_left <= low_stock_threshold -%}
+      <span style="width:10px;height:10px;border-radius:50%;background:#E8730C;"></span>
+      <span>Only {{ stock_left }} left in stock</span>
+    {%- else -%}
+      <span style="width:10px;height:10px;border-radius:50%;background:#01814D;"></span>
+      <span>In stock</span>
+    {%- endif -%}
+  </div>
+{%- endif -%}

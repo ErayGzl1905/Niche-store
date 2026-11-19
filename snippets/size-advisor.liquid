@@ -1,0 +1,688 @@
+{%- comment -%}
+  Size Advisor (FR)
+  Textes en français.
+  Now with shoe/sandal detection and separate flow.
+{%- endcomment -%}
+
+{%- liquid
+  assign has_size_option = false
+  assign available_sizes_raw = ''
+  for option in product.options_with_values
+    assign option_name_down = option.name | downcase
+    if option_name_down contains 'size' or option_name_down contains 'maat' or option_name_down contains 'taille' or option_name_down contains 'pointure'
+      assign has_size_option = true
+      for value in option.values
+        assign available_sizes_raw = available_sizes_raw | append: value | append: '|'
+      endfor
+    endif
+  endfor
+
+  comment
+    Detect if this is a shoe/sandal product
+  endcomment
+  assign is_shoe = false
+  assign product_type_down = product.type | downcase
+  assign product_title_down = product.title | downcase
+  assign product_tags_joined = product.tags | join: ',' | downcase
+
+  if product_type_down contains 'shoe' or product_type_down contains 'chaussure' or product_type_down contains 'basket' or product_type_down contains 'botte' or product_type_down contains 'sandal' or product_type_down contains 'boot' or product_type_down contains 'sneaker' or product_type_down contains 'footwear' or product_type_down contains 'loafer' or product_type_down contains 'flat'
+    assign is_shoe = true
+  elsif product_title_down contains 'sandal' or product_title_down contains 'chaussure' or product_title_down contains 'basket' or product_title_down contains 'botte' or product_title_down contains 'escarpin' or product_title_down contains 'mocassin' or product_title_down contains 'sneaker' or product_title_down contains 'boot' or product_title_down contains 'loafer' or product_title_down contains 'slipper' or product_title_down contains 'flats'
+    assign is_shoe = true
+  elsif product_tags_joined contains 'shoes' or product_tags_joined contains 'chaussures' or product_tags_joined contains 'footwear' or product_tags_joined contains 'sandals'
+    assign is_shoe = true
+  endif
+-%}
+
+{%- if has_size_option -%}
+<div class="sa-wrap" data-sa-product="{{ product.id }}" data-sa-shoe="{{ is_shoe }}">
+  <button type="button" class="sa-trigger" onclick="document.getElementById('sa-modal-{{ product.id }}').classList.add('sa-open')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      <path d="M12 8v4M12 16h.01"/>
+    </svg>
+    <span>Trouver ma taille</span>
+  </button>
+
+  <div class="sa-modal" id="sa-modal-{{ product.id }}" role="dialog" aria-modal="true" aria-labelledby="sa-title-{{ product.id }}">
+    <div class="sa-overlay" onclick="document.getElementById('sa-modal-{{ product.id }}').classList.remove('sa-open')"></div>
+    <div class="sa-dialog">
+      <button type="button" class="sa-close" onclick="document.getElementById('sa-modal-{{ product.id }}').classList.remove('sa-open')" aria-label="Fermer">×</button>
+
+      <div class="sa-progress">
+        <div class="sa-progress-bar" id="sa-bar-{{ product.id }}" style="width:50%"></div>
+      </div>
+
+      {%- if is_shoe -%}
+        <!-- SHOE FLOW: Single step, foot length in cm -->
+        <div class="sa-step sa-active" data-step="1">
+          <p class="sa-eyebrow">Étape 1 sur 1</p>
+          <h3 class="sa-q" id="sa-title-{{ product.id }}">Quelle est la longueur de votre pied ?</h3>
+          <p class="sa-helper">Mesurez du talon jusqu'au bout de l'orteil le plus long. Posez votre pied sur une feuille et marquez les deux extrémités au crayon pour une mesure précise.</p>
+
+          <div class="sa-input-wrap sa-units-metric">
+            <input type="number" step="0.1" class="sa-input" id="sa-footlen-{{ product.id }}" min="20" max="30" placeholder="24.5" inputmode="decimal">
+            <span class="sa-unit">cm</span>
+          </div>
+
+          <button type="button" class="sa-next sa-finish" onclick="saShoeFinish({{ product.id }})">Voir ma taille</button>
+        </div>
+
+        <!-- SHOE RESULT -->
+        <div class="sa-step sa-result" data-step="2">
+          <p class="sa-eyebrow">Votre taille</p>
+          <div class="sa-result-box">
+            <p class="sa-result-size" id="sa-result-size-{{ product.id }}">7</p>
+            <p class="sa-result-conversions" id="sa-result-conv-{{ product.id }}">US 9</p>
+            <p class="sa-result-msg" id="sa-result-msg-{{ product.id }}">C'est la taille que nous vous conseillons.</p>
+          </div>
+          <p class="sa-shoe-tip">
+            Petit conseil : ce modèle peut tailler légèrement petit. Si vous êtes entre deux pointures, prenez la pointure au-dessus.
+          </p>
+          <p class="sa-reassure">
+            Pas la bonne taille ? Renvoyez-la : vous avez 30 jours pour changer d'avis.
+          </p>
+          <button type="button" class="sa-select" id="sa-select-btn-{{ product.id }}" onclick="saSelectSize({{ product.id }})">Choisir cette taille</button>
+          <button type="button" class="sa-restart" onclick="saShoeRestart({{ product.id }})">Recommencer</button>
+        </div>
+
+      {%- else -%}
+        <!-- CLOTHING FLOW: original 5 steps -->
+
+        <!-- Step 1: Height -->
+        <div class="sa-step sa-active" data-step="1">
+          <p class="sa-eyebrow">Étape 1 sur 5</p>
+          <h3 class="sa-q" id="sa-title-{{ product.id }}">Quelle est votre taille (en cm) ?</h3>
+
+          <div class="sa-unit-toggle" role="tablist">
+            <button type="button" class="sa-unit-btn sa-unit-active" data-units="metric" onclick="saSwitchUnits({{ product.id }}, 'metric')">CM / KG</button>
+            <button type="button" class="sa-unit-btn" data-units="imperial" onclick="saSwitchUnits({{ product.id }}, 'imperial')">FT / LBS</button>
+          </div>
+
+          <div class="sa-input-wrap sa-units-metric">
+            <input type="number" class="sa-input" id="sa-height-{{ product.id }}" min="140" max="210" placeholder="165" inputmode="numeric">
+            <span class="sa-unit">cm</span>
+          </div>
+          <div class="sa-input-wrap sa-units-imperial sa-input-wrap-double" style="display:none">
+            <div class="sa-input-pair">
+              <input type="number" class="sa-input sa-input-small" id="sa-height-ft-{{ product.id }}" min="4" max="7" placeholder="5" inputmode="numeric">
+              <span class="sa-unit">ft</span>
+            </div>
+            <div class="sa-input-pair">
+              <input type="number" class="sa-input sa-input-small" id="sa-height-in-{{ product.id }}" min="0" max="11" placeholder="4" inputmode="numeric">
+              <span class="sa-unit">in</span>
+            </div>
+          </div>
+
+          <button type="button" class="sa-next" onclick="saNext({{ product.id }}, 1)">Continuer</button>
+        </div>
+
+        <!-- Step 2: Weight -->
+        <div class="sa-step" data-step="2">
+          <p class="sa-eyebrow">Étape 2 sur 5</p>
+          <h3 class="sa-q">Quel est votre poids ?</h3>
+
+          <div class="sa-unit-toggle" role="tablist">
+            <button type="button" class="sa-unit-btn sa-unit-active" data-units="metric" onclick="saSwitchUnits({{ product.id }}, 'metric')">CM / KG</button>
+            <button type="button" class="sa-unit-btn" data-units="imperial" onclick="saSwitchUnits({{ product.id }}, 'imperial')">FT / LBS</button>
+          </div>
+
+          <div class="sa-input-wrap sa-units-metric">
+            <input type="number" class="sa-input" id="sa-weight-{{ product.id }}" min="40" max="180" placeholder="70" inputmode="numeric">
+            <span class="sa-unit">kg</span>
+          </div>
+          <div class="sa-input-wrap sa-units-imperial" style="display:none">
+            <input type="number" class="sa-input" id="sa-weight-lbs-{{ product.id }}" min="88" max="397" placeholder="154" inputmode="numeric">
+            <span class="sa-unit">lbs</span>
+          </div>
+
+          <div class="sa-actions">
+            <button type="button" class="sa-back" onclick="saPrev({{ product.id }}, 2)">Retour</button>
+            <button type="button" class="sa-next" onclick="saNext({{ product.id }}, 2)">Continuer</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Usual size -->
+        <div class="sa-step" data-step="3">
+          <p class="sa-eyebrow">Étape 3 sur 5</p>
+          <h3 class="sa-q">Quelle taille portez-vous habituellement ?</h3>
+          <div class="sa-options" id="sa-usual-{{ product.id }}">
+            {%- for option in product.options_with_values -%}
+              {%- assign option_name_down = option.name | downcase -%}
+              {%- if option_name_down contains 'size' or option_name_down contains 'maat' or option_name_down contains 'taille' or option_name_down contains 'pointure' -%}
+                {%- for value in option.values -%}
+                  <button type="button" class="sa-opt" data-val="{{ value | escape }}">{{ value }}</button>
+                {%- endfor -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          <div class="sa-actions">
+            <button type="button" class="sa-back" onclick="saPrev({{ product.id }}, 3)">Retour</button>
+            <button type="button" class="sa-next" onclick="saNext({{ product.id }}, 3)">Continuer</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Body shape -->
+        <div class="sa-step" data-step="4">
+          <p class="sa-eyebrow">Étape 4 sur 5</p>
+          <h3 class="sa-q">Quelle est votre silhouette ?</h3>
+          <div class="sa-options sa-options-stack" id="sa-shape-{{ product.id }}">
+            <button type="button" class="sa-opt sa-opt-wide" data-val="straight">Droite, mensurations similaires en haut et en bas</button>
+            <button type="button" class="sa-opt sa-opt-wide" data-val="curvy">Pulpeuse, poitrine et hanches marquées, taille fine</button>
+            <button type="button" class="sa-opt sa-opt-wide" data-val="top">Plus forte en haut, épaules ou poitrine plus larges</button>
+            <button type="button" class="sa-opt sa-opt-wide" data-val="bottom">Plus forte en bas, hanches ou cuisses plus larges</button>
+          </div>
+          <div class="sa-actions">
+            <button type="button" class="sa-back" onclick="saPrev({{ product.id }}, 4)">Retour</button>
+            <button type="button" class="sa-next" onclick="saNext({{ product.id }}, 4)">Continuer</button>
+          </div>
+        </div>
+
+        <!-- Step 5: How should it feel -->
+        <div class="sa-step" data-step="5">
+          <p class="sa-eyebrow">Étape 5 sur 5</p>
+          <h3 class="sa-q">Comment souhaitez-vous que le vêtement tombe ?</h3>
+          <div class="sa-options sa-options-stack" id="sa-fit-{{ product.id }}">
+            <button type="button" class="sa-opt sa-opt-wide" data-val="snug">Près du corps</button>
+            <button type="button" class="sa-opt sa-opt-wide" data-val="normal">Taille normale, ni trop serré ni trop ample</button>
+            <button type="button" class="sa-opt sa-opt-wide" data-val="loose">Un peu plus ample, plus d'aisance</button>
+          </div>
+          <div class="sa-actions">
+            <button type="button" class="sa-back" onclick="saPrev({{ product.id }}, 5)">Retour</button>
+            <button type="button" class="sa-next sa-finish" onclick="saFinish({{ product.id }})">Voir ma taille</button>
+          </div>
+        </div>
+
+        <!-- Clothing Result -->
+        <div class="sa-step sa-result" data-step="6">
+          <p class="sa-eyebrow">Votre taille</p>
+          <div class="sa-result-box">
+            <p class="sa-result-size" id="sa-result-size-{{ product.id }}">L</p>
+            <p class="sa-result-msg" id="sa-result-msg-{{ product.id }}">C'est la taille que nous vous conseillons.</p>
+          </div>
+          <p class="sa-reassure">
+            Pas la bonne taille ? Renvoyez-la : vous avez 30 jours pour changer d'avis.
+          </p>
+          <button type="button" class="sa-select" id="sa-select-btn-{{ product.id }}" onclick="saSelectSize({{ product.id }})">Choisir cette taille</button>
+          <button type="button" class="sa-restart" onclick="saRestart({{ product.id }})">Recommencer</button>
+        </div>
+
+      {%- endif -%}
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .sa-wrap{margin:14px 0 0;font-family:inherit}
+  .sa-trigger{
+    display:inline-flex;align-items:center;gap:6px;
+    background:transparent;color:#111111;
+    border:none;padding:6px 0;
+    font-size:14px;font-weight:500;
+    cursor:pointer;transition:opacity .2s ease;
+    font-family:inherit;
+    text-decoration:underline;text-underline-offset:3px;
+  }
+  .sa-trigger:hover{opacity:.7}
+  .sa-trigger svg{width:14px;height:14px;flex-shrink:0}
+
+  .sa-modal{
+    display:none;position:fixed;inset:0;z-index:9999;
+    align-items:center;justify-content:center;
+    padding:20px;box-sizing:border-box;
+  }
+  .sa-modal.sa-open{display:flex}
+  .sa-overlay{position:absolute;inset:0;background:rgba(89,63,21,.55);}
+  .sa-dialog{
+    position:relative;background:#FFFFFF;border-radius:24px;
+    width:100%;max-width:480px;max-height:90vh;overflow-y:auto;
+    padding:64px 28px 28px;box-sizing:border-box;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+  }
+  .sa-close{
+    position:absolute;top:24px;right:24px;
+    width:32px;height:32px;background:#111111;border:none;border-radius:50%;
+    color:#f5f5f5;font-size:20px;line-height:1;cursor:pointer;padding:0;
+    font-family:inherit;display:flex;align-items:center;justify-content:center;z-index:2;
+  }
+  .sa-close:hover{opacity:.85}
+
+  .sa-progress{height:4px;background:#f5f5f5;border-radius:999px;margin-bottom:24px;overflow:hidden;}
+  .sa-progress-bar{height:100%;background:#111111;border-radius:999px;transition:width .3s ease;}
+
+  .sa-step{display:none}
+  .sa-step.sa-active{display:block}
+
+  .sa-eyebrow{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#A0825A;margin:0 0 12px;}
+  .sa-q{margin:0 0 24px;font-size:22px;font-weight:700;color:#111111;line-height:1.3;}
+  .sa-helper{font-size:14px;color:#6b6b6b;line-height:1.5;margin:-16px 0 20px;}
+
+  .sa-unit-toggle{display:flex;gap:6px;margin-bottom:16px;background:#f5f5f5;border-radius:999px;padding:4px;}
+  .sa-unit-btn{flex:1;background:transparent;border:none;outline:none;padding:8px 12px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:#6b6b6b;letter-spacing:0.5px;transition:all .15s;}
+  .sa-unit-btn.sa-unit-active{background:#111111;color:#f5f5f5;}
+  .sa-input-wrap-double{gap:12px;padding:0;background:transparent;margin-bottom:24px;}
+  .sa-input-pair{flex:1;display:flex;align-items:center;gap:8px;background:#F8F3E8;border-radius:14px;padding:14px 18px;}
+  .sa-input-small{font-size:18px}
+  .sa-input-wrap{display:flex;align-items:center;gap:10px;background:#F8F3E8;border-radius:14px;padding:14px 18px;margin-bottom:24px;}
+  .sa-input{flex:1;background:transparent;border:none;outline:none;font-size:18px;color:#111111;font-family:inherit;font-weight:500;-moz-appearance:textfield;width:100%;}
+  .sa-input::-webkit-outer-spin-button,.sa-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .sa-input::placeholder{color:#B5A685;font-weight:400}
+  .sa-unit{font-size:14px;color:#6b6b6b;font-weight:500;}
+
+  .sa-options{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+  .sa-options-stack{flex-direction:column}
+  .sa-opt{background:#f5f5f5;color:#111111;border:1px solid #f5f5f5;border-radius:12px;padding:12px 18px;font-size:15px;font-weight:500;cursor:pointer;transition:all .15s ease;font-family:inherit;text-align:left;}
+  .sa-opt-wide{width:100%}
+  .sa-opt:hover{border-color:#111111}
+  .sa-opt.sa-selected{background:#111111;color:#f5f5f5;border-color:#111111;}
+
+  .sa-actions{display:flex;gap:10px;align-items:center;}
+  .sa-next, .sa-finish{flex:1;background:#f5f5f5;color:#111111;border:none;border-radius:12px;padding:14px 20px;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s ease;font-family:inherit;}
+  .sa-next:hover, .sa-finish:hover{opacity:.85}
+  .sa-back{background:transparent;color:#111111;border:1px solid #dddddd;border-radius:12px;padding:14px 20px;font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;}
+  .sa-back:hover{border-color:#111111}
+
+  .sa-result-box{background:#F8F3E8;border-radius:18px;padding:32px 24px;text-align:center;margin-bottom:18px;}
+  .sa-result-size{font-size:56px;font-weight:700;color:#111111;margin:0 0 8px;line-height:1;}
+  .sa-result-conversions{font-size:14px;color:#6b6b6b;margin:0 0 12px;letter-spacing:.5px;}
+  .sa-result-msg{font-size:15px;color:#111111;margin:0;line-height:1.5;}
+  .sa-shoe-tip{font-size:13px;color:#111111;line-height:1.5;margin:0 0 16px;background:#f5f5f5;padding:12px 16px;border-radius:12px;border-left:3px solid #111111;}
+  .sa-reassure{font-size:14px;color:#111111;line-height:1.6;margin:0 0 20px;text-align:center;}
+  .sa-select{width:100%;background:#f5f5f5;color:#111111;border:none;border-radius:12px;padding:16px 20px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px;}
+  .sa-select:hover{opacity:.85}
+  .sa-restart{width:100%;background:transparent;color:#6b6b6b;border:none;padding:8px;font-size:13px;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:3px;}
+
+  @media (min-width:750px){.sa-q{font-size:24px}}
+</style>
+
+<script>
+(function(){
+  var pid = {{ product.id }};
+  var isShoe = {{ is_shoe | json }};
+  var availableRaw = "{{ available_sizes_raw | escape }}";
+  var available = availableRaw.split('|').filter(function(s){return s.length>0});
+  var answers = {height:0, weight:0, usual:'', shape:'', fit:''};
+  var saUnits = 'metric';
+
+  // Shoe size conversion table: foot length cm -> {au, eu, us}
+  // Only WHOLE AU sizes. Breakpoints shifted DOWN to size up aggressively for Chinese fit.
+  // 24.0cm → EU 39, 25.0cm → EU 40, etc.
+  var shoeTable = [
+    {cm:21.9, au:'36', eu:'36', us:'6'},
+    {cm:22.9, au:'37', eu:'37', us:'7'},
+    {cm:23.9, au:'38', eu:'38', us:'8'},
+    {cm:24.9, au:'39', eu:'39', us:'9'},
+    {cm:25.9, au:'40', eu:'40', us:'10'},
+    {cm:26.9, au:'41', eu:'41', us:'11'},
+    {cm:27.9, au:'42', eu:'42', us:'12'},
+    {cm:29.9, au:'43', eu:'43', us:'13'}
+  ];
+
+  function normSize(s){ return (s || '').toString().toUpperCase().replace(/\s/g,''); }
+
+  // ========== SHOE FLOW ==========
+  window.saShoeFinish = window.saShoeFinish || function(productId){
+    if(productId !== pid) return;
+    var footLen = parseFloat(document.getElementById('sa-footlen-'+pid).value);
+    if(!footLen || footLen < 20 || footLen > 30){
+      alert('Veuillez indiquer une longueur de pied entre 20 et 30 cm.');
+      return;
+    }
+
+    // Round up to nearest size in table
+    var match = null;
+    for(var i=0; i<shoeTable.length; i++){
+      if(shoeTable[i].cm >= footLen){
+        match = shoeTable[i];
+        break;
+      }
+    }
+    if(!match) match = shoeTable[shoeTable.length-1];
+
+    // Try to find a matching variant in available sizes
+    var finalAU = match.au;
+    var finalDisplay = match.au;
+    var canSelect = false;
+    var displayValue = '';
+
+    // Strict match first (prevents "6" matching "16")
+    for(var j=0; j<available.length; j++){
+      var av = normSize(available[j]);
+      var auNorm = normSize(match.au);
+      if(av === auNorm || av === 'AU'+auNorm || av === 'AUS'+auNorm || av.indexOf('AUS'+auNorm+'(') !== -1 || av.indexOf('AU'+auNorm+'(') !== -1 || av.indexOf(auNorm+'AUS') !== -1 || av.indexOf(auNorm+'AU') !== -1){
+        finalDisplay = available[j];
+        displayValue = available[j];
+        canSelect = true;
+        break;
+      }
+    }
+
+    // Looser fallback
+    if(!canSelect){
+      for(var k=0; k<available.length; k++){
+        var av2 = normSize(available[k]);
+        var auNorm2 = normSize(match.au);
+        if(av2.indexOf(auNorm2) !== -1){
+          finalDisplay = available[k];
+          displayValue = available[k];
+          canSelect = true;
+          break;
+        }
+      }
+    }
+
+    document.getElementById('sa-result-size-'+pid).textContent = finalDisplay;
+    document.getElementById('sa-result-conv-'+pid).textContent = 'US ' + match.us;
+
+    var msg;
+    if(canSelect){
+      msg = "C'est la taille que nous vous conseillons.";
+    } else {
+      msg = "Nous vous conseillons la pointure " + match.au + ", mais elle n'est pas disponible pour ce modèle. Découvrez nos autres modèles.";
+    }
+    document.getElementById('sa-result-msg-'+pid).textContent = msg;
+
+    var selectBtn = document.getElementById('sa-select-btn-'+pid);
+    if(canSelect){
+      selectBtn.style.display = 'block';
+      selectBtn.textContent = 'Choisir ' + finalDisplay;
+      selectBtn.setAttribute('data-final', displayValue);
+    } else {
+      selectBtn.style.display = 'none';
+    }
+
+    document.querySelector('#sa-modal-'+pid+' .sa-step[data-step="1"]').classList.remove('sa-active');
+    document.querySelector('#sa-modal-'+pid+' .sa-step[data-step="2"]').classList.add('sa-active');
+    var bar = document.getElementById('sa-bar-'+pid);
+    if(bar) bar.style.width = '100%';
+  };
+
+  window.saShoeRestart = window.saShoeRestart || function(productId){
+    if(productId !== pid) return;
+    var fl = document.getElementById('sa-footlen-'+pid); if(fl) fl.value = '';
+    document.querySelector('#sa-modal-'+pid+' .sa-step[data-step="2"]').classList.remove('sa-active');
+    document.querySelector('#sa-modal-'+pid+' .sa-step[data-step="1"]').classList.add('sa-active');
+    var bar = document.getElementById('sa-bar-'+pid);
+    if(bar) bar.style.width = '50%';
+  };
+
+  // ========== CLOTHING FLOW (unchanged) ==========
+  window.saSwitchUnits = window.saSwitchUnits || function(productId, mode){
+    if(productId !== pid) return;
+    saUnits = mode;
+    var modal = document.getElementById('sa-modal-'+pid);
+    if(!modal) return;
+    modal.querySelectorAll('.sa-unit-btn').forEach(function(b){
+      if(b.getAttribute('data-units') === mode){ b.classList.add('sa-unit-active'); }
+      else { b.classList.remove('sa-unit-active'); }
+    });
+    modal.querySelectorAll('.sa-units-metric').forEach(function(el){
+      el.style.display = (mode === 'metric') ? '' : 'none';
+    });
+    modal.querySelectorAll('.sa-units-imperial').forEach(function(el){
+      el.style.display = (mode === 'imperial') ? '' : 'none';
+    });
+  };
+
+  window.saNext = window.saNext || function(productId, step){
+    if(productId !== pid) return;
+    if(step === 1){
+      var h;
+      if(saUnits === 'metric'){
+        h = parseInt(document.getElementById('sa-height-'+pid).value, 10);
+        if(!h || h < 140 || h > 210){ alert('Veuillez indiquer une taille entre 140 et 210 cm.'); return; }
+      } else {
+        var ft = parseInt(document.getElementById('sa-height-ft-'+pid).value, 10);
+        var inc = parseInt(document.getElementById('sa-height-in-'+pid).value, 10);
+        if(isNaN(inc)) inc = 0;
+        if(!ft || ft < 4 || ft > 7){ alert('Veuillez indiquer une taille entre 4 et 7 pieds.'); return; }
+        if(inc < 0 || inc > 11){ alert('Les pouces doivent être entre 0 et 11.'); return; }
+        h = Math.round(ft * 30.48 + inc * 2.54);
+        if(h < 140 || h > 210){ alert('Veuillez indiquer une taille entre 4ft 7in et 6ft 11in.'); return; }
+      }
+      answers.height = h;
+    } else if(step === 2){
+      var w;
+      if(saUnits === 'metric'){
+        w = parseInt(document.getElementById('sa-weight-'+pid).value, 10);
+        if(!w || w < 40 || w > 180){ alert('Veuillez indiquer un poids entre 40 et 180 kg.'); return; }
+      } else {
+        var lbs = parseInt(document.getElementById('sa-weight-lbs-'+pid).value, 10);
+        if(!lbs || lbs < 88 || lbs > 397){ alert('Veuillez indiquer un poids entre 88 et 397 lbs.'); return; }
+        w = Math.round(lbs * 0.453592);
+      }
+      answers.weight = w;
+    } else if(step === 3){
+      if(!answers.usual){ alert('Veuillez choisir une taille.'); return; }
+    } else if(step === 4){
+      if(!answers.shape){ alert('Veuillez choisir une silhouette.'); return; }
+    }
+    showStep(step + 1);
+  };
+
+  window.saPrev = window.saPrev || function(productId, step){
+    if(productId !== pid) return;
+    showStep(step - 1);
+  };
+
+  function showStep(n){
+    var steps = document.querySelectorAll('#sa-modal-'+pid+' .sa-step');
+    steps.forEach(function(s){ s.classList.remove('sa-active'); });
+    var target = document.querySelector('#sa-modal-'+pid+' .sa-step[data-step="'+n+'"]');
+    if(target) target.classList.add('sa-active');
+    var bar = document.getElementById('sa-bar-'+pid);
+    if(bar) bar.style.width = (n*20) + '%';
+  }
+
+  ['usual','shape','fit'].forEach(function(key){
+    var container = document.getElementById('sa-'+key+'-'+pid);
+    if(!container) return;
+    container.addEventListener('click', function(e){
+      var btn = e.target.closest('.sa-opt');
+      if(!btn) return;
+      container.querySelectorAll('.sa-opt').forEach(function(b){ b.classList.remove('sa-selected'); });
+      btn.classList.add('sa-selected');
+      answers[key] = btn.getAttribute('data-val');
+    });
+  });
+
+  window.saFinish = window.saFinish || function(productId){
+    if(productId !== pid) return;
+    if(!answers.fit){ alert('Veuillez choisir le tombé souhaité.'); return; }
+
+    var sizeOrder = ['XS','S','M','L','XL','2XL','3XL','4XL','XXL','XXXL'];
+    var canonical = {'XXL':'2XL','XXXL':'3XL'};
+
+    var bmi = answers.weight / Math.pow(answers.height/100, 2);
+    var bmiSize;
+    if(bmi < 19) bmiSize = 'XS';
+    else if(bmi < 22) bmiSize = 'S';
+    else if(bmi < 25) bmiSize = 'M';
+    else if(bmi < 28) bmiSize = 'L';
+    else if(bmi < 32) bmiSize = 'XL';
+    else if(bmi < 36) bmiSize = '2XL';
+    else if(bmi < 40) bmiSize = '3XL';
+    else bmiSize = '4XL';
+
+    var bmiIdx = sizeOrder.indexOf(bmiSize);
+    var usualNorm = normSize(answers.usual);
+    if(canonical[usualNorm]) usualNorm = canonical[usualNorm];
+    var usualIdx = sizeOrder.indexOf(usualNorm);
+    if(usualIdx < 0) usualIdx = bmiIdx;
+
+    var combinedIdx = Math.ceil((bmiIdx + usualIdx) / 2);
+
+    if(answers.shape === 'curvy' || answers.shape === 'top' || answers.shape === 'bottom'){
+      combinedIdx += 1;
+    }
+
+    if(answers.fit === 'snug'){
+      combinedIdx = Math.max(bmiIdx, combinedIdx - 1);
+    } else if(answers.fit === 'loose'){
+      combinedIdx += 1;
+    }
+
+    combinedIdx = Math.min(combinedIdx, 7);
+    var recommendedSize = sizeOrder[combinedIdx];
+
+    var availNorm = available.map(function(s){
+      var n = normSize(s);
+      return canonical[n] || n;
+    });
+
+    var availOriginal = {};
+    available.forEach(function(s){
+      var n = normSize(s);
+      var c = canonical[n] || n;
+      availOriginal[c] = s;
+    });
+
+    var availIndices = availNorm.map(function(s){ return sizeOrder.indexOf(s); }).filter(function(i){return i>=0});
+    if(availIndices.length === 0){
+      document.getElementById('sa-result-size-'+pid).textContent = recommendedSize;
+      document.getElementById('sa-result-msg-'+pid).textContent = "C'est la taille que nous vous conseillons.";
+      document.getElementById('sa-select-btn-'+pid).style.display = 'none';
+      showStep(6);
+      return;
+    }
+    var minIdx = Math.min.apply(null, availIndices);
+    var maxIdx = Math.max.apply(null, availIndices);
+    var recIdx = sizeOrder.indexOf(recommendedSize);
+
+    var finalSize, message;
+
+    if(availIndices.indexOf(recIdx) !== -1){
+      finalSize = availOriginal[recommendedSize] || recommendedSize;
+      message = "C'est la taille que nous vous conseillons.";
+    } else if(recIdx > maxIdx){
+      var biggest = sizeOrder[maxIdx];
+      finalSize = availOriginal[biggest] || biggest;
+      message = finalSize + " est la plus grande taille de ce modèle. Elle pourrait être un peu ajustée : jetez aussi un œil à nos modèles plus amples.";
+    } else if(recIdx < minIdx){
+      var smallest = sizeOrder[minIdx];
+      finalSize = availOriginal[smallest] || smallest;
+      message = "La plus petite taille de ce modèle est " + finalSize + ". Elle devrait vous aller avec un peu d'aisance.";
+    } else {
+      var nextUp = availIndices.filter(function(i){return i>recIdx});
+      if(nextUp.length > 0){
+        var nextIdx = Math.min.apply(null, nextUp);
+        var nextSize = sizeOrder[nextIdx];
+        finalSize = availOriginal[nextSize] || nextSize;
+        message = "C'est la taille que nous vous conseillons.";
+      } else {
+        finalSize = availOriginal[sizeOrder[maxIdx]] || sizeOrder[maxIdx];
+        message = "C'est la taille que nous vous conseillons.";
+      }
+    }
+
+    document.getElementById('sa-result-size-'+pid).textContent = finalSize;
+    document.getElementById('sa-result-msg-'+pid).textContent = message;
+    var selectBtn = document.getElementById('sa-select-btn-'+pid);
+    selectBtn.style.display = 'block';
+    selectBtn.textContent = 'Choisir ' + finalSize;
+    selectBtn.setAttribute('data-final', finalSize);
+    showStep(6);
+  };
+
+  window.saSelectSize = window.saSelectSize || function(productId){
+    if(productId !== pid) return;
+    var selectBtn = document.getElementById('sa-select-btn-'+pid);
+    var target = selectBtn.getAttribute('data-final');
+    if(!target) return;
+
+    var targetUpper = normSize(target);
+    var inputs = document.querySelectorAll('input[type="radio"], select option');
+    var found = false;
+    inputs.forEach(function(el){
+      if(found) return;
+      var val = normSize(el.value || '');
+      if(val === targetUpper){
+        if(el.tagName === 'INPUT'){
+          el.click();
+          found = true;
+        } else if(el.tagName === 'OPTION'){
+          var sel = el.parentElement;
+          sel.value = el.value;
+          sel.dispatchEvent(new Event('change', {bubbles:true}));
+          found = true;
+        }
+      }
+    });
+
+    if(!found){
+      var labels = document.querySelectorAll('label');
+      labels.forEach(function(lbl){
+        if(found) return;
+        var txt = normSize(lbl.textContent || '');
+        if(txt === targetUpper){
+          lbl.click();
+          found = true;
+        }
+      });
+    }
+
+    document.getElementById('sa-modal-'+pid).classList.remove('sa-open');
+  };
+
+  window.saRestart = window.saRestart || function(productId){
+    if(productId !== pid) return;
+    answers = {height:0, weight:0, usual:'', shape:'', fit:''};
+    var hMet = document.getElementById('sa-height-'+pid); if(hMet) hMet.value = '';
+    var wMet = document.getElementById('sa-weight-'+pid); if(wMet) wMet.value = '';
+    var hFt = document.getElementById('sa-height-ft-'+pid); if(hFt) hFt.value = '';
+    var hIn = document.getElementById('sa-height-in-'+pid); if(hIn) hIn.value = '';
+    var wLbs = document.getElementById('sa-weight-lbs-'+pid); if(wLbs) wLbs.value = '';
+    document.querySelectorAll('#sa-modal-'+pid+' .sa-opt').forEach(function(b){ b.classList.remove('sa-selected'); });
+    showStep(1);
+  };
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      var m = document.getElementById('sa-modal-'+pid);
+      if(m) m.classList.remove('sa-open');
+    }
+  });
+})();
+</script>
+
+<script>
+/* Position only: moves the Size Advisor above the size selector, below the colour selector. */
+(function(){
+  function placeSizeAdvisor(){
+    var wrap = document.querySelector('.sa-wrap');
+    var picker = document.querySelector('variant-picker, .variant-picker, product-form');
+    if(!wrap || !picker || wrap.getAttribute('data-sa-moved')) return;
+
+    var labels = picker.querySelectorAll('legend, label, .variant-picker__option-label, .form-label, p, span');
+    var target = null;
+    for(var i = 0; i < labels.length; i++){
+      var txt = (labels[i].textContent || '').trim();
+      if(txt.length < 25 && /^(size|maat)/i.test(txt)){
+        target = labels[i].closest('fieldset') || labels[i].parentElement;
+        break;
+      }
+    }
+
+    if(target && target.parentNode){
+      target.parentNode.insertBefore(wrap, target);
+      wrap.setAttribute('data-sa-moved', '1');
+      wrap.style.margin = '0';
+      wrap.style.padding = '0';
+      wrap.style.lineHeight = '1';
+      var trigger = wrap.querySelector('.sa-trigger');
+      if(trigger){
+        trigger.style.padding = '0';
+        trigger.style.margin = '0';
+        trigger.style.display = 'inline-flex';
+      }
+    }
+  }
+  placeSizeAdvisor();
+  document.addEventListener('DOMContentLoaded', placeSizeAdvisor);
+  document.addEventListener('shopify:section:load', placeSizeAdvisor);
+  setTimeout(placeSizeAdvisor, 400);
+  setTimeout(placeSizeAdvisor, 1200);
+})();
+</script>
+{%- endif -%}

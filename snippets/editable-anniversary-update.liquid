@@ -1,0 +1,26 @@
+<div class="eanniv-wrapper">
+  <div class="eanniv-box">
+    <p>
+      <strong>{{ settings.eanniv_heading }}</strong>
+      {{ settings.eanniv_text }}
+    </p>
+  </div>
+</div>
+
+<style>
+.eanniv-box {
+  max-width: 880px;
+  margin: 14px auto 0 auto;
+  padding: 12px 14px;
+  border-left: 3px solid {{ settings.eanniv_border_color }};
+  background-color: {{ settings.eanniv_bg_color }};
+  box-sizing: border-box;
+}
+
+.eanniv-box p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: {{ settings.eanniv_text_color }};
+}
+</style>

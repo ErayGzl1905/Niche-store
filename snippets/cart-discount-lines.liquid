@@ -1,0 +1,26 @@
+{%- if cart.total_discount > 0 -%}
+  <div class="cart-discount-lines" style="margin:12px 0;padding:12px 0;border-top:1px solid #7A6240;border-bottom:1px solid #7A6240;color:#26221E;">
+    {%- for discount in cart.cart_level_discount_applications -%}
+      <p style="margin:0 0 6px;display:flex;justify-content:space-between;">
+        <span>{{ discount.title }}</span>
+        <span>-{{ discount.total_allocated_amount | money }}</span>
+      </p>
+    {%- endfor -%}
+    {%- assign line_total = 0 -%}
+    {%- for item in cart.items -%}
+      {%- for alloc in item.line_level_discount_allocations -%}
+        {%- assign line_total = line_total | plus: alloc.amount -%}
+      {%- endfor -%}
+    {%- endfor -%}
+    {%- if line_total > 0 -%}
+      <p style="margin:0 0 6px;display:flex;justify-content:space-between;">
+        <span>Bundle savings</span>
+        <span>-{{ line_total | money }}</span>
+      </p>
+    {%- endif -%}
+    <p style="margin:6px 0 0;display:flex;justify-content:space-between;font-weight:600;">
+      <span>You save</span>
+      <span>{{ cart.total_discount | money }}</span>
+    </p>
+  </div>
+{%- endif -%}
