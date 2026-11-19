@@ -1,0 +1,28 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "text-with-icons": {
+      "type": "text-with-icons",
+      "blocks": {
+        "livraison": { "type": "item", "settings": { "icon": "picto-box", "mobile_icon_width": 24, "icon_width": 24, "icon_background_type": "none", "icon_background": "", "icon_color": "#c4a882", "title": "Livraison gratuite", "content": "<p>Sur toutes les commandes, sans minimum d'achat.</p>" } },
+        "retours": { "type": "item", "settings": { "icon": "picto-return", "mobile_icon_width": 24, "icon_width": 24, "icon_background_type": "none", "icon_background": "", "icon_color": "#c4a882", "title": "30 jours pour changer d'avis", "content": "<p>Retour gratuit, remboursement complet garanti.</p>" } },
+        "service": { "type": "item", "settings": { "icon": "picto-customer-support", "mobile_icon_width": 24, "icon_width": 24, "icon_background_type": "none", "icon_background": "", "icon_color": "#c4a882", "title": "Service client 7j/7", "content": "<p>Une question ? Lucie vous répond en moins de 24 h.</p>" } },
+        "paiement": { "type": "item", "settings": { "icon": "picto-lock", "mobile_icon_width": 24, "icon_width": 24, "icon_background_type": "none", "icon_background": "", "icon_color": "#c4a882", "title": "Paiement sécurisé", "content": "<p>Carte bancaire, PayPal, Apple Pay, Google Pay.</p>" } }
+      },
+      "block_order": ["livraison","retours","service","paiement"],
+      "settings": { "full_width": true, "stack_on_mobile": false, "title": "", "heading_tag": "h6", "text_alignment": "center", "icon_spacing": "small", "background": "#faf8f5", "background_gradient": "", "text_color": "#0B1F3A" }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "newsletter": { "type": "newsletter", "settings": { "image_width": 150, "heading_size": "h6", "title": "-10 % sur votre première commande", "content": "<p>Inscrivez-vous et recevez votre code de bienvenue, ainsi qu'un accès en avant-première à nos nouveautés.</p>" } },
+        "text": { "type": "text", "settings": { "title": "LES SACS DE LUCIE PARIS", "content": "<p><strong>Les Sacs de Lucie Paris</strong><br/>Sacs artisanaux & accessoires pour femmes qui aiment les choses belles.<br/><br/><strong>Service client</strong><br/>Réponse sous 24 h, 7 jours sur 7<br/><a href=\"mailto:bonjour@lessacsdelucie.fr\">bonjour@lessacsdelucie.fr</a></p>", "enable_follow_on_shop": false } },
+        "links": { "type": "links", "settings": { "menu": "footer", "show_menu_title": true, "menu_title": "Informations" } }
+      },
+      "block_order": ["newsletter","text","links"],
+      "settings": { "show_social_media": false, "show_payment_icons": true, "show_country_selector": false, "show_country_flag": false, "show_country_name": false, "show_locale_selector": false }
+    }
+  },
+  "order": ["text-with-icons","footer"]
+}

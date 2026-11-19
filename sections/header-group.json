@@ -1,0 +1,26 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "msg_0": { "type": "message", "settings": { "text": "🚚 Livraison gratuite — sans minimum d'achat", "url": "" } },
+        "msg_1": { "type": "message", "settings": { "text": "✨ -10 % pour 2 articles | -15 % pour 3 | -20 % pour 4", "url": "" } },
+        "msg_2": { "type": "message", "settings": { "text": "↩ 30 jours pour changer d'avis — retour offert", "url": "" } },
+        "msg_3": { "type": "message", "settings": { "text": "🔒 Paiement 100 % sécurisé", "url": "" } }
+      },
+      "block_order": ["msg_0","msg_1","msg_2","msg_3"],
+      "settings": { "enable_sticky": true, "autoplay": true, "cycle_speed": 4, "text_size": "text-xs", "navigation_mode": "arrows", "scrolling_speed": 20, "background": "#0B1F3A", "background_gradient": "", "text_color": "#ffffff" }
+    },
+    "header": {
+      "type": "header",
+      "settings": { "enable_sticky": true, "hide_on_scroll": false, "logo": "", "logo_max_width": 190, "logo_mobile_max_width": 130, "menu": "main-menu", "sidebar_menu": "", "secondary_menu": "", "menu_open_trigger": "click", "opening_from": "bottom", "layout": "drawer", "show_social_media": false, "show_locale_selector": false, "show_country_selector": false, "show_country_flag": false, "show_country_name": false, "transparent_header_text_color": "#ffffff", "transparent_logo": "", "reduce_padding": false, "background_opacity": 100, "background_blur_radius": 0 }
+    },
+    "promo_strip": {
+      "type": "custom-liquid",
+      "settings": { "full_width": true, "remove_vertical_spacing": true, "remove_horizontal_spacing": true, "liquid": "<div class=\"lucie-strip\"><span>🎁 OFFRE DU MOMENT : LIVRAISON OFFERTE + JUSQU'À -20 % EN LOT — Profitez-en !</span></div><style>.lucie-strip{background:#f5f0eb;color:#5a3e28;text-align:center;padding:10px 12px;font-size:12px;font-weight:600;letter-spacing:.06em}@media(min-width:750px){.lucie-strip{font-size:13px}}</style>", "background": "", "background_gradient": "", "text_color": "" }
+    }
+  },
+  "order": ["announcement-bar","header","promo_strip"]
+}

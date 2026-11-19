@@ -1,0 +1,329 @@
+<style>
+  @media screen and (min-width: 700px) {
+    #cart-drawer.drawer, #cart-drawer.drawer--lg { width: 420px; padding: 0; }
+  }
+  #cart-drawer { padding: 0; --drawer-body-padding: 1rem 1.25rem; --drawer-footer-padding: 1rem 1.25rem 1.25rem; --drawer-header-padding: 1rem 1.25rem; }
+  #cart-drawer::part(content) { border-radius: 0; box-shadow: -8px 0 30px rgba(11,31,58,.18); }
+  #cart-drawer::part(footer) { border-color: #E3E8F0; }
+  #cart-drawer .cart-drawer__top { padding-block-end: 1rem; gap: .5rem; }
+  #cart-drawer .cart-drawer__line-items > * + * { padding-block-start: .875rem; }
+  #cart-drawer .cart-drawer__recommendations { --horizontal-product-width: 300px; }
+  #cart-drawer > [is="close-button"] { top: 1.1rem; right: 1.1rem; }
+  #cart-drawer .h5 { font-size: 1rem; letter-spacing: .02em; text-transform: uppercase; }
+</style>
+<cart-drawer {% if request.design_mode %}handle-section-events{% endif %} class="cart-drawer drawer drawer--lg" id="cart-drawer">
+  {%- if cart.item_count == 0 -%}
+    <button is="close-button" aria-label="{{ 'general.accessibility.close' | t | escape }}">
+      {%- render 'icon' with 'close' -%}
+    </button>
+
+    <div class="empty-state align-self-center">
+      <div class="empty-state__icon-wrapper">
+        {%- render 'icon' with 'cart', width: 32, height: 32, stroke_width: 1 -%}
+        <span class="count-bubble count-bubble--lg">0</span>
+      </div>
+
+      <div class="prose">
+        <p class="h5">{{ 'cart.general.empty' | t }}</p>
+
+        {%- assign button_content = 'cart.general.continue_shopping' | t -%}
+        {%- render 'button', href: settings.cart_empty_button_link, size: 'xl', content: button_content -%}
+      </div>
+    </div>
+  {%- else -%}
+    {%- liquid
+      assign qc_count = cart.item_count
+      assign bundle_fill = qc_count | times: 25
+      if bundle_fill > 100
+        assign bundle_fill = 100
+      endif
+      if qc_count == 1
+        assign upsell_text = 'Ajoutez 1 article et obtenez <strong>10 % de rabais</strong> sur toute la commande'
+      elsif qc_count == 2
+        assign upsell_text = 'Ajoutez 1 article et obtenez <strong>15 % de rabais</strong> sur toute la commande'
+      elsif qc_count == 3
+        assign upsell_text = 'Ajoutez 1 article et obtenez <strong>20 % de rabais</strong> sur toute la commande'
+      else
+        assign upsell_text = 'Bravo! Vous profitez de <strong>20 % de rabais</strong> sur toute la commande'
+      endif
+    -%}
+
+    <style>
+      #cart-drawer .bf-bundle { background:#EEF2F8; border-radius:8px; padding:10px 12px; margin-top:10px; }
+      #cart-drawer .bf-bundle__text { font-size:13px; font-weight:500; line-height:1.35; color:#0B1F3A; margin:0 0 8px; }
+      #cart-drawer .bf-bundle__track { height:6px; background:#D5DEEC; border-radius:99px; overflow:hidden; }
+      #cart-drawer .bf-bundle__fill { height:100%; background:#1E8E3E; border-radius:99px; transition:width .4s ease; }
+      #cart-drawer .bf-bundle__steps { display:flex; justify-content:space-between; margin-top:5px; font-size:10.5px; font-weight:600; color:#51627D; }
+      #cart-drawer .bf-trust { display:flex; flex-wrap:wrap; gap:4px 12px; margin-top:10px; font-size:11.5px; font-weight:500; color:#0B1F3A; }
+      #cart-drawer .bf-trust span::before { content:"\2713"; color:#1E8E3E; font-weight:700; margin-right:4px; }
+      #cart-drawer .bf-cart-reassure { text-align:center; font-size:11.5px; margin:0; color:#51627D; }
+      #cart-drawer .bf-cart-shipping { font-size:12px; margin:0; color:#1E8E3E; font-weight:600; }
+      #cart-drawer .bf-reco-title { font-size:13px; font-weight:600; margin:0; }
+      #cart-drawer .qc-pay { display:flex; flex-wrap:wrap; justify-content:center; gap:5px; }
+      #cart-drawer .qc-pay svg { width:34px; height:22px; }
+      #cart-drawer button[name="checkout"] {
+        background:#1E8E3E !important; color:#ffffff !important; border-color:#1E8E3E !important;
+        text-transform:uppercase; letter-spacing:.05em; font-weight:700;
+      }
+      #cart-drawer button[name="checkout"] svg { color:#ffffff !important; }
+    </style>
+
+    <div class="cart-drawer__inner">
+      <div class="cart-drawer__top">
+        <div class="h-stack items-center justify-between">
+          <div class="h-stack grow gap-2 sm:gap-2.5">
+            <p class="h5">{{- 'cart.general.title' | t -}}</p>
+            <cart-count class="count-bubble count-bubble--md">{{ cart.item_count }}</cart-count>
+          </div>
+
+          <button type="button" is="close-button" class="drawer__close-icon">
+            <span class="sr-only">{{ 'general.accessibility.close' | t }}</span>
+            {%- render 'icon' with 'close' -%}
+          </button>
+        </div>
+
+        <div class="bf-bundle">
+          <p class="bf-bundle__text">{{ upsell_text }}</p>
+          <div class="bf-bundle__track"><div class="bf-bundle__fill" style="width:{{ bundle_fill }}%;"></div></div>
+          <div class="bf-bundle__steps">
+            <span>2 articles : -10 %</span>
+            <span>3 articles : -15 %</span>
+            <span>4 articles : -20 %</span>
+          </div>
+        </div>
+
+        <div class="bf-trust">
+          <span>Livraison gratuite avec suivi</span>
+          <span>Satisfait ou argent remis 30 jours</span>
+          <span>Service 7 jours sur 7</span>
+        </div>
+      </div>
+
+      <div class="v-stack gap-6 sm:gap-8">
+        <div class="cart-drawer__line-items">
+          {%- for line_item in cart.items -%}
+            {%- render 'line-item', line_item: line_item, show_desktop_quantity: true -%}
+          {%- endfor -%}
+        </div>
+
+        <div class="cart-drawer__recommendations">
+          <div class="v-stack gap-2.5 sm:gap-4">
+            {%- capture carousel_id -%}cart-drawer-recommendations{%- endcapture -%}
+
+            {%- liquid
+              assign horizontal_products_blends = true
+              assign product_card_background = section.settings.product_card_background | default: product.settings.product_card_background
+
+              if product_card_background != 'rgba(0,0,0,0)' and product_card_background != blank and product_card_background != settings.dialog_background
+                assign horizontal_products_blends = false
+              endif
+
+              assign rec_handle = ''
+              for cart_item in cart.items
+                for c in cart_item.product.collections
+                  if c.handle != 'all' and c.handle != 'frontpage' and c.products_count > 1
+                    assign rec_handle = c.handle
+                    break
+                  endif
+                endfor
+                if rec_handle != ''
+                  break
+                endif
+              endfor
+
+              assign rendered_recommendations = 0
+
+              capture recommendations
+                if rec_handle != ''
+                  assign rec_collection = collections[rec_handle]
+                  for recommended_product in rec_collection.products limit: 30
+                    if rendered_recommendations >= 8
+                      break
+                    endif
+                    assign item_count_in_cart = cart | line_items_for: recommended_product
+
+                    if item_count_in_cart.size == 0 and recommended_product.available
+                      render 'horizontal-product', product: recommended_product, show_add_to_cart: true, background: section.settings.product_card_background, text_color: section.settings.product_card_text_color
+                      assign rendered_recommendations = rendered_recommendations | plus: 1
+                    endif
+                  endfor
+                endif
+
+                if rendered_recommendations == 0
+                  for recommended_product in section.settings.products
+                    assign item_count_in_cart = cart | line_items_for: recommended_product
+
+                    if item_count_in_cart.size == 0
+                      render 'horizontal-product', product: recommended_product, show_add_to_cart: true, background: section.settings.product_card_background, text_color: section.settings.product_card_text_color
+                      assign rendered_recommendations = rendered_recommendations | plus: 1
+                    endif
+                  endfor
+                endif
+              endcapture
+            -%}
+
+            {%- if rendered_recommendations > 0 -%}
+              <div class="h-stack justify-between gap-4">
+                <p class="bf-reco-title">Complétez votre look</p>
+
+                {%- if rendered_recommendations > 1 -%}
+                  <div class="h-stack gap-2 hidden sm:flex">
+                    <button is="prev-button" class="circle-chevron hover:colors" aria-controls="{{ carousel_id }}" aria-label="{{ 'general.accessibility.previous' | t | escape }}" disabled>{%- render 'icon' with 'chevron-left-small', direction_aware: true -%}</button>
+                    <button is="next-button" class="circle-chevron hover:colors" aria-controls="{{ carousel_id }}" aria-label="{{ 'general.accessibility.next' | t | escape }}">{%- render 'icon' with 'chevron-right-small', direction_aware: true -%}</button>
+                  </div>
+                {%- endif -%}
+              </div>
+
+              <scroll-carousel selector=".horizontal-product" id="{{ carousel_id }}" class="horizontal-product-list-carousel {% unless horizontal_products_blends %}separate{% endunless %} scroll-area bleed">
+                <div class="horizontal-product-list {% if horizontal_products_blends %}divide-x{% else %}separate{% endif %}">
+                  {{- recommendations -}}
+                </div>
+              </scroll-carousel>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="v-stack gap-4 sm:gap-6" slot="footer">
+      <div class="v-stack gap-1">
+        {% for discount_application in cart.cart_level_discount_applications %}
+          <div class="h-stack gap-4 justify-between">
+            <div class="badge">
+              {%- render 'icon' with 'discount' -%} {{- discount_application.title -}}
+            </div>
+
+            <span class="text-subdued">-{{ discount_application.total_allocated_amount | money }}</span>
+          </div>
+        {% endfor %}
+
+
+        {%- assign cart_label = 'cart.general.total' | t -%}
+
+        {%- if section.settings.show_shipping_text -%}
+          <p class="text-subdued text-sm bf-cart-shipping">Livraison gratuite avec suivi sur toutes les commandes</p>
+        {%- endif -%}
+
+        <div class="h-stack gap-4 justify-between" style="font-family:var(--text-font-family);font-size:1.125rem;font-weight:600;font-variant-numeric:lining-nums;">
+          <span>{{- cart_label -}}</span>
+          <span>{{- cart.total_price | money -}}</span>
+        </div>
+
+        {%- if section.settings.show_cart_note -%}
+          <button type="button" class="justify-self-start" aria-controls="cart-drawer-note">
+            <span class="link text-sm text-subdued">
+              {%- if cart.note == blank -%}
+                {{- 'cart.general.add_order_note' | t -}}
+              {%- else -%}
+                {{- 'cart.general.edit_order_note' | t -}}
+              {%- endif -%}
+            </span>
+          </button>
+
+          <cart-note-dialog id="cart-drawer-note" class="cart-drawer__note">
+            <div class="cart-drawer__note-inner">
+              <div class="v-stack gap-4 sm:gap-6">
+                <p class="h5">{{ 'cart.general.order_note' | t }}</p>
+
+                <cart-note class="v-stack gap-4">
+                  {%- assign order_note = 'cart.general.order_note' | t -%}
+                  {%- assign order_save_label = 'cart.general.save_note' | t -%}
+
+                  {%- render 'input', name: 'note', multiline: 3, label: order_note, value: cart.note -%}
+
+                  <div class="justify-self-start">
+                    {%- render 'button', type: 'button', content: order_save_label, size: 'lg', is: 'close-button', secondary: true -%}
+                  </div>
+                </cart-note>
+              </div>
+            </div>
+          </cart-note-dialog>
+        {%- endif -%}
+      </div>
+
+      <form action="{{ routes.cart_url }}" method="POST" class="buy-buttons {% if section.settings.show_checkout_button %}buy-buttons--compact{% endif %}">
+        {%- assign checkout_label = 'Passer à la caisse' -%}
+
+        {%- if section.settings.show_view_cart_button or section.settings.show_checkout_button == false -%}
+          <a href="{{ routes.cart_url }}" class="button button--xl {% if section.settings.show_checkout_button %}button--secondary{% endif %}" data-no-instant>
+            {{- 'cart.general.view_cart' | t -}}
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.show_checkout_button -%}
+          {%- render 'button', type: 'submit', content: checkout_label, icon: 'picto-lock', name: 'checkout', size: 'xl' -%}
+        {%- endif -%}
+      </form>
+
+      <div class="qc-pay">{%- for type in shop.enabled_payment_types -%}{{ type | payment_type_svg_tag }}{%- endfor -%}</div>
+      <p class="bf-cart-reassure">Paiement 100 % sécurisé · Satisfait ou argent remis 30 jours</p>
+    </div>
+  {%- endif -%}
+</cart-drawer>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Cart drawer won't appear to your customers if you have set the cart type to Page in the global theme settings."
+    },
+    {
+      "type": "paragraph",
+      "content": "Free shipping bar can be configured in global cart settings."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_note",
+      "label": "Show cart note",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping_text",
+      "label": "Show shipping text",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_cart_button",
+      "label": "Show view cart button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_checkout_button",
+      "label": "Show checkout button",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Product recommendations"
+    },
+    {
+      "type": "text",
+      "id": "recommendations_title",
+      "label": "Heading",
+      "default": "Trending this month"
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Recommendations",
+      "info": "Fallback when the cart items have no collection to recommend from. Recommendations already in the cart are automatically hidden.",
+      "limit": 10
+    },
+    {
+      "type": "color",
+      "id": "product_card_background",
+      "label": "Product card background"
+    },
+    {
+      "type": "color",
+      "id": "product_card_text_color",
+      "label": "Product card text"
+    }
+  ]
+}
+{% endschema %}
