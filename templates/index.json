@@ -1,0 +1,225 @@
+{
+  "sections": {
+    "hero": {
+      "type": "slideshow",
+      "blocks": {
+        "slide-1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/wmremove-transformed_4.png",
+            "content_max_width": 700,
+            "mobile_text_position": "place-self-center text-center",
+            "desktop_text_position": "sm:place-self-center sm:text-center",
+            "subheading": "VENTE DE LIQUIDATION — JUSQU'À -60 %",
+            "title": "Des sacs piqués main à prix réduits",
+            "heading_tag": "h1",
+            "button_text": "Voir toutes les collections",
+            "button_link": "shopify://collections/all",
+            "text_color": "#ffffff",
+            "button_background": "#ffffff",
+            "button_text_color": "#0B1F3A",
+            "overlay_color": "#000000",
+            "overlay_opacity": 35,
+            "background": "",
+            "background_gradient": ""
+          }
+        }
+      },
+      "block_order": ["slide-1"],
+      "settings": {
+        "full_width": true,
+        "allow_transparent_header": false,
+        "show_initial_transition": false,
+        "image_size": "adapt",
+        "controls_type": "dots",
+        "transition_type": "fade_with_text",
+        "autoplay": false,
+        "cycle_speed": 6,
+        "background": "#1a1a1a",
+        "background_gradient": ""
+      }
+    },
+    "artisanaux": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "sacs-artisanaux",
+        "products": [],
+        "full_width": true,
+        "stack_products": false,
+        "show_progress_bar": true,
+        "products_count": 4,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "subheading": "",
+        "title": "Sacs artisanaux piqués main",
+        "content": "",
+        "link_url": "shopify://collections/sacs-artisanaux",
+        "link_text": "Voir tout →",
+        "background": "#ffffff",
+        "background_gradient": "",
+        "text_color": "#0B1F3A",
+        "heading_color": "",
+        "heading_gradient": "",
+        "product_card_background": "",
+        "product_card_text_color": ""
+      }
+    },
+    "paniers": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "paniers-a-linge",
+        "products": [],
+        "full_width": true,
+        "stack_products": false,
+        "show_progress_bar": true,
+        "products_count": 4,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "subheading": "",
+        "title": "Paniers à linge matelassés",
+        "content": "",
+        "link_url": "shopify://collections/paniers-a-linge",
+        "link_text": "Voir tout →",
+        "background": "#faf8f5",
+        "background_gradient": "",
+        "text_color": "#0B1F3A",
+        "heading_color": "",
+        "heading_gradient": "",
+        "product_card_background": "",
+        "product_card_text_color": ""
+      }
+    },
+    "voyage": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "sacs-de-voyage",
+        "products": [],
+        "full_width": true,
+        "stack_products": false,
+        "show_progress_bar": true,
+        "products_count": 4,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "subheading": "",
+        "title": "Sacs de voyage matelassés",
+        "content": "",
+        "link_url": "shopify://collections/sacs-de-voyage",
+        "link_text": "Voir tout →",
+        "background": "#ffffff",
+        "background_gradient": "",
+        "text_color": "#0B1F3A",
+        "heading_color": "",
+        "heading_gradient": "",
+        "product_card_background": "",
+        "product_card_text_color": ""
+      }
+    },
+    "trousses": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "trousses-de-maquillage",
+        "products": [],
+        "full_width": true,
+        "stack_products": false,
+        "show_progress_bar": true,
+        "products_count": 4,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "subheading": "",
+        "title": "Trousses de maquillage matelassées",
+        "content": "",
+        "link_url": "shopify://collections/trousses-de-maquillage",
+        "link_text": "Voir tout →",
+        "background": "#faf8f5",
+        "background_gradient": "",
+        "text_color": "#0B1F3A",
+        "heading_color": "",
+        "heading_gradient": "",
+        "product_card_background": "",
+        "product_card_text_color": ""
+      }
+    },
+    "cabas": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "cabas-tote-bags",
+        "products": [],
+        "full_width": true,
+        "stack_products": false,
+        "show_progress_bar": true,
+        "products_count": 4,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "subheading": "",
+        "title": "Cabas & tote bags matelassés",
+        "content": "",
+        "link_url": "shopify://collections/cabas-tote-bags",
+        "link_text": "Voir tout →",
+        "background": "#ffffff",
+        "background_gradient": "",
+        "text_color": "#0B1F3A",
+        "heading_color": "",
+        "heading_gradient": "",
+        "product_card_background": "",
+        "product_card_text_color": ""
+      }
+    },
+    "brand-story": {
+      "type": "rich-text",
+      "blocks": {
+        "sub": { "type": "subheading", "settings": { "text": "NOTRE HISTOIRE" } },
+        "titre": { "type": "heading", "settings": { "text": "Chaque point raconte une histoire", "heading_tag": "h2" } },
+        "texte": { "type": "text", "settings": { "content": "<p>Je m'appelle Lucie. Depuis mon atelier parisien, je confectionne et sélectionne des sacs piqués main depuis plus de vingt ans. Des chats sur les livres, des fleurs sauvages, des chouettes dans la nuit — chaque motif est une histoire que je voulais voir portée dans la rue. Aujourd'hui, je fais une grande vente pour faire de la place aux nouvelles créations. Profitez-en, ces prix ne durent pas.</p>" } },
+        "btn": { "type": "button", "settings": { "button_label": "Notre histoire", "button_link": "shopify://pages/notre-histoire", "secondary_button_label": "", "secondary_button_link": "" } }
+      },
+      "block_order": ["sub", "titre", "texte", "btn"],
+      "settings": { "full_width": false, "text_alignment": "center", "text_alignment_mobile": "center", "background": "#f5f0eb", "background_gradient": "", "text_color": "#0B1F3A", "heading_color": "#5a3e28", "heading_gradient": "" }
+    },
+    "avis-titre": {
+      "type": "rich-text",
+      "blocks": {
+        "sub": { "type": "subheading", "settings": { "text": "AVIS CLIENTS VÉRIFIÉS" } },
+        "titre": { "type": "heading", "settings": { "text": "100 000+ clientes heureuses adorent leurs sacs", "heading_tag": "h2" } },
+        "stars": { "type": "text", "settings": { "content": "<p><strong>⭐⭐⭐⭐⭐ Excellent · 4,9 sur 5</strong><br/>Basé sur 15 000+ avis vérifiés</p>" } }
+      },
+      "block_order": ["sub", "titre", "stars"],
+      "settings": { "full_width": false, "text_alignment": "center", "text_alignment_mobile": "center", "background": "#ffffff", "background_gradient": "", "text_color": "#0B1F3A", "heading_color": "", "heading_gradient": "" }
+    },
+    "reviews": {
+      "type": "testimonials",
+      "blocks": {
+        "r1": { "type": "testimonial", "settings": { "content": "\"J'ai commandé le panier à linge motif chouette pour ma salle de bain. Il est encore plus beau en vrai qu'en photo ! La qualité du piqué est impressionnante. Je vais en recommander un autre.\"", "author": "Marie-Claire W. — Lyon", "show_rating": true, "rating": 5 } },
+        "r2": { "type": "testimonial", "settings": { "content": "\"Magnifique sac artisanal motif chat sur les livres. Reçu en 9 jours, emballage soigné. Tout le monde me demande où je l'ai trouvé. Lucie fait un travail exceptionnel.\"", "author": "Sophie D. — Bordeaux", "show_rating": true, "rating": 5 } },
+        "r3": { "type": "testimonial", "settings": { "content": "\"Mon troisième achat chez Les Sacs de Lucie Paris. Je ne commande plus ailleurs. La qualité est toujours au rendez-vous et le service client répond vraiment dans la journée.\"", "author": "Patricia G. — Toulouse", "show_rating": true, "rating": 5 } },
+        "r4": { "type": "testimonial", "settings": { "content": "\"Offert à ma mère pour son anniversaire. Elle a pleuré tellement c'était beau ! Le sac de voyage avec les chats dans les fleurs est une vraie œuvre d'art. Merci Lucie !\"", "author": "Isabelle M. — Marseille", "show_rating": true, "rating": 5 } },
+        "r5": { "type": "testimonial", "settings": { "content": "\"Hésitais à commander en ligne mais je ne regrette absolument pas. Livraison rapide, qualité irréprochable. La trousse de maquillage tient bien fermée et les motifs sont superbes.\"", "author": "Nathalie R. — Nantes", "show_rating": true, "rating": 5 } },
+        "r6": { "type": "testimonial", "settings": { "content": "\"Le cabas matelassé est parfait pour faire mes courses. Solide, spacieux et tellement joli. Les gens me font des compliments à chaque fois que je l'utilise. Je suis fan !\"", "author": "Françoise L. — Paris", "show_rating": true, "rating": 5 } }
+      },
+      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6"],
+      "settings": { "full_width": true, "subheading": "", "title": "", "stack_testimonials": false, "background": "#ffffff", "background_gradient": "", "text_color": "#0B1F3A", "heading_color": "", "heading_gradient": "", "testimonial_card_background": "#faf8f5", "testimonial_card_text_color": "#0B1F3A" }
+    },
+    "cta": {
+      "type": "rich-text",
+      "blocks": {
+        "sub": { "type": "subheading", "settings": { "text": "VENTE LIMITÉE" } },
+        "titre": { "type": "heading", "settings": { "text": "Profitez de nos prix soldés — stocks limités", "heading_tag": "h2" } },
+        "texte": { "type": "text", "settings": { "content": "<p>Pour faire de la place aux nouvelles créations, tous nos sacs piqués main sont en vente à prix réduit. Une fois les stocks épuisés, les prix remontent. Ne manquez pas cette occasion.</p>" } },
+        "btn": { "type": "button", "settings": { "button_label": "Voir toutes les collections", "button_link": "shopify://collections/all", "secondary_button_label": "", "secondary_button_link": "" } }
+      },
+      "block_order": ["sub", "titre", "texte", "btn"],
+      "settings": { "full_width": true, "text_alignment": "center", "text_alignment_mobile": "center", "background": "#0B1F3A", "background_gradient": "", "text_color": "#ffffff", "heading_color": "#c4a882", "heading_gradient": "" }
+    },
+    "contact": {
+      "type": "rich-text",
+      "blocks": {
+        "sub": { "type": "subheading", "settings": { "text": "À VOTRE SERVICE" } },
+        "titre": { "type": "heading", "settings": { "text": "Nous sommes là pour vous", "heading_tag": "h2" } },
+        "texte": { "type": "text", "settings": { "content": "<p>📧 bonjour@lessacsdelucie.fr<br/>🕐 Lundi–Samedi 10h–19h | Dimanche fermé<br/>💬 Réponse garantie sous 24 heures</p>" } },
+        "btn": { "type": "button", "settings": { "button_label": "Nous contacter", "button_link": "shopify://pages/contactez-nous", "secondary_button_label": "", "secondary_button_link": "" } }
+      },
+      "block_order": ["sub", "titre", "texte", "btn"],
+      "settings": { "full_width": false, "text_alignment": "center", "text_alignment_mobile": "center", "background": "#faf8f5", "background_gradient": "", "text_color": "#0B1F3A", "heading_color": "#5a3e28", "heading_gradient": "" }
+    }
+  },
+  "order": ["hero","artisanaux","paniers","voyage","trousses","cabas","brand-story","avis-titre","reviews","cta","contact"]
+}

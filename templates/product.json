@@ -1,0 +1,384 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "liquid_kEnVLK": {
+          "type": "liquid",
+          "settings": {
+            "liquid": "{%- liquid\n  assign r = product.metafields.reviews.rating.value\n  assign rc = product.metafields.reviews.rating_count.value | default: 0\n-%}\n{%- if rc > 0 -%}\n<a href=\"#avis\" class=\"fr-rating\">\n  <span class=\"fr-stars\">★★★★★</span>\n  <span class=\"fr-rating-text\"><strong>{{ r.rating | round: 1 }}/5</strong> · {{ rc }} avis clients</span>\n</a>\n<style>\n  .fr-rating{display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;color:#111;text-decoration:none;font-size:13px}\n  .fr-stars{letter-spacing:1px;font-size:14px}\n</style>\n{%- endif -%}"
+          }
+        },
+        "liquid_4qEaAH": {
+          "type": "liquid",
+          "disabled": false,
+          "settings": {
+            "liquid": "{%- assign v = product.selected_or_first_available_variant -%}\n{%- if v.inventory_management == 'shopify' and v.inventory_quantity > 0 and v.inventory_quantity <= 10 -%}\n<p class=\"qc-stock\"><span class=\"qc-stock__dot\"></span>Faites vite! Plus que <strong>{{ v.inventory_quantity }}</strong> en stock</p>\n{%- endif -%}"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "heading_tag": "h1"
+          }
+        },
+        "badges": {
+          "type": "badges",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_taxes_notice": false
+          }
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {
+            "show_empty": false
+          },
+          "disabled": true
+        },
+        "payment_terms": {
+          "type": "payment_terms",
+          "settings": {},
+          "disabled": true
+        },
+        "separator": {
+          "type": "separator",
+          "settings": {},
+          "disabled": true
+        },
+        "liquid_TdrFHz": {
+          "type": "liquid",
+          "disabled": true,
+          "settings": {
+            "liquid": "<ul class=\"usp-list\" aria-label=\"Shop guarantees\">\n  \n  <li class=\"usp-item\">\n    <img\n      class=\"usp-icon icon-1\"\n      src=\"https://cdn.shopify.com/s/files/1/0741/7321/9048/files/Untitled_design_-_2025-09-30T001855.604_700x_cc2c0eef-ce91-4900-b7b1-52ca0c9f76f6.webp?v=1761134944\"\n      alt=\"\"\n      loading=\"lazy\" decoding=\"async\" />\n    <span class=\"usp-text text-1\">Livraison gratuite avec UPS</span>\n  </li>\n\n  <li class=\"usp-item\">\n    <img\n      class=\"usp-icon icon-2\"\n      src=\"//cdn.shopify.com/s/files/1/0920/3213/9593/files/952397-200.png?v=1743117081\"\n      alt=\"\"\n      loading=\"lazy\" decoding=\"async\" />\n    <span class=\"usp-text text-2\">Retours faciles sous 30 jours</span>\n  </li>\n\n  <li class=\"usp-item\">\n    <img\n      class=\"usp-icon icon-3\" \n      src=\"https://cdn.shopify.com/s/files/1/0920/3213/9593/files/Ontwerp_zonder_titel_17.png?v=1744290507\"\n      alt=\"\"\n      loading=\"lazy\" decoding=\"async\" />\n    <span class=\"usp-text text-3\">Achetez 2, économisez 10% &nbsp;|&nbsp; Achetez 3+, économisez 15%</span>\n  </li>\n\n</ul>\n\n<style>\n  /* --- AFSTELLING: ICOONTJES --- */\n  .icon-1 { transform: translateX(0px); }\n  .icon-2 { transform: translateX(-0.2px); }\n  .icon-3 { transform: translateX(0.7px); }\n\n  /* --- AFSTELLING: TEKST --- */\n  .text-1 { transform: translateX(0px); }\n  .text-2 { transform: translateX(-0.2px); }\n  .text-3 { transform: translateX(-0.3px); }\n\n  /* --- ALGEMENE STIJLEN --- */\n  .usp-list {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n    display: flex;\n    flex-direction: column;\n    gap: 8px; \n    font: inherit;\n    color: inherit;\n  }\n\n  .usp-item {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    line-height: 1.3;\n    font-size: 1rem;\n  }\n\n  .usp-icon {\n    width: 20px;\n    height: 20px;\n    object-fit: contain;\n    flex-shrink: 0;\n    opacity: 0.9;\n  }\n\n  .usp-text {\n    font: inherit;\n    color: inherit;\n    letter-spacing: 0.01em;\n    font-weight: 400;\n    display: inline-block; \n  }\n</style>"
+          }
+        },
+        "liquid_3ABNfa": {
+          "type": "liquid",
+          "settings": {
+            "liquid": "{%render 'editable-usp-list'%}"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "hide_sold_out_variants": false,
+            "stack_blocks": true,
+            "selector_style": "block",
+            "swatch_selector_style": "swatch",
+            "variant_image_options": "Couleur, Colour, Color, Kleur",
+            "size_chart_page": ""
+          }
+        },
+        "liquid_nDYJy6": {
+          "type": "liquid",
+          "disabled": true,
+          "settings": {
+            "liquid": "<style>\n  .blink {\n    animation: blink-animation 1.5s steps(5, start) infinite;\n    color: red;\n    display: inline-block; /* Display as inline-block */\n    vertical-align: middle; /* Align vertically to middle */\n    font-size: 10px; /* Set font size */\n  }\n\n  @keyframes blink-animation {\n    to {\n      visibility: hidden;\n    }\n  }\n\n  .red-div {\n    /* background-color: #ffcccc; */ /* Background removed */\n    padding: 2px 10px; /* 6px vertical, 10px horizontal */\n    border-radius: 8px; /* Rounded corners */\n    display: inline-block; /* Display as inline-block */\n    text-align: center; /* Center align the content */\n    margin: 0 auto; /* Horizontally center the red-div */\n  }\n\n  .text {\n    display: inline-block; /* Display as inline-block */\n    vertical-align: middle; /* Align vertically to middle */\n    margin-left: 10px; /* Add some space between the dot and the text */\n    color: #AD0000; /* Text color */\n    font-weight: 500; /* Medium font weight */\n    font-size: 12px; /* Set font size */\n    text-align: justify; /* Justify the text to the center */\n  }\n</style>\n\n<div class=\"red-div\">\n  <div class=\"blink\">&#9679;</div>\n  <div class=\"text\">Low stock</div>\n</div>"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {},
+          "disabled": true
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_payment_button": false,
+            "show_gift_card_recipient": true,
+            "atc_button_background": "#1E8E3E",
+            "atc_button_text_color": "#ffffff",
+            "payment_button_background": "",
+            "payment_button_text_color": ""
+          }
+        },
+        "liquid_dY3PV8": {
+          "type": "liquid",
+          "disabled": true,
+          "settings": {
+            "liquid": "<script>\n(function(){\n  function place(){\n    var wrap = document.querySelector('.sa-wrap');\n    var picker = document.querySelector('variant-picker, .variant-picker, product-form');\n    if(!wrap || !picker || wrap.getAttribute('data-sa-moved')) return;\n\n    var labels = picker.querySelectorAll('legend, label, .variant-picker__option-label, .form-label, p, span');\n    var target = null;\n    for(var i = 0; i < labels.length; i++){\n      var txt = (labels[i].textContent || '').trim();\n      if(txt.length < 25 && /^(size|maat)/i.test(txt)){\n        target = labels[i].closest('fieldset') || labels[i].parentElement;\n        break;\n      }\n    }\n\n    if(target && target.parentNode){\n      target.parentNode.insertBefore(wrap, target);\n      wrap.setAttribute('data-sa-moved', '1');\n    }\n  }\n  place();\n  document.addEventListener('DOMContentLoaded', place);\n  document.addEventListener('shopify:section:load', place);\n  setTimeout(place, 400);\n  setTimeout(place, 1200);\n})();\n</script>\n</div>"
+          }
+        },
+        "liquid_UyP4ia": {
+          "type": "liquid",
+          "disabled": false,
+          "settings": {
+            "liquid": "{%render 'editable-shipping-bar'%}"
+          }
+        },
+        "liquid_b9AXdR": {
+          "type": "liquid",
+          "settings": {
+            "liquid": "{%render 'editable-anniversary-update'%}"
+          }
+        },
+        "collapsible_text_V7KbCr": {
+          "type": "collapsible_text",
+          "settings": {
+            "title": "Livraison gratuite",
+            "content": "<p><strong>Livraison gratuite sur toutes les commandes, sans minimum.</strong> Chaque colis est suivi : vous recevez votre lien de suivi par courriel dès l'expédition. Délai approximatif : 7 à 12 jours ouvrables.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_text_gTEktt": {
+          "type": "collapsible_text",
+          "settings": {
+            "title": "30 jours pour changer d'idée",
+            "content": "<p>Vous avez 30 jours suivant la réception pour nous retourner l'article : remboursement complet ou échange de taille ou de couleur. Contactez-nous simplement par courriel.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_text_NifkNw": {
+          "type": "collapsible_text",
+          "settings": {
+            "title": "Service à la clientèle",
+            "content": "<p>Une question sur votre commande? Répondez à votre courriel de confirmation ou écrivez-nous à service@votremarque.ca. Réponse en moins de 24 h en semaine.</p>",
+            "page": ""
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "collapse_content": true
+          }
+        },
+        "fr_payments": {
+          "type": "liquid",
+          "settings": {
+            "liquid": "<div class=\"fr-pay\">\n  {%- for type in shop.enabled_payment_types -%}{{ type | payment_type_svg_tag: class: 'fr-pay-icon' }}{%- endfor -%}\n</div>\n<style>\n  .fr-pay{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:4px}\n  .fr-pay-icon{width:38px;height:24px}\n</style>"
+          }
+        }
+      },
+      "block_order": [
+        "liquid_kEnVLK",
+        "title",
+        "badges",
+        "price",
+        "liquid_3ABNfa",
+        "variant_picker",
+        "liquid_4qEaAH",
+        "buy_buttons",
+        "liquid_UyP4ia",
+        "fr_payments",
+        "liquid_b9AXdR",
+        "description",
+        "collapsible_text_V7KbCr",
+        "collapsible_text_gTEktt",
+        "collapsible_text_NifkNw",
+        "rating",
+        "payment_terms",
+        "separator",
+        "liquid_TdrFHz",
+        "liquid_nDYJy6",
+        "quantity_selector",
+        "liquid_dY3PV8"
+      ],
+      "settings": {
+        "full_width": true,
+        "show_fixed_add_to_cart": true,
+        "desktop_media_width": 55,
+        "desktop_media_layout": "carousel_thumbnails_left",
+        "mobile_media_size": "expanded",
+        "mobile_carousel_control": "dots",
+        "enable_video_autoplay": false,
+        "enable_video_looping": true,
+        "enable_image_zoom": true,
+        "max_image_zoom_level": 3,
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "input_background": "rgba(0,0,0,0)",
+        "input_text_color": ""
+      }
+    },
+    "testimonials_mKJMCa": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_eQz4RG": {
+          "type": "testimonial",
+          "settings": {
+            "image": "",
+            "round_avatar": true,
+            "show_rating": true,
+            "rating": 5,
+            "author": "Prénom N.",
+            "title": "Titre de l'avis",
+            "content": "<p>Remplacez par un avis client réel.</p>"
+          }
+        },
+        "testimonial_yQbxRY": {
+          "type": "testimonial",
+          "settings": {
+            "image": "",
+            "round_avatar": true,
+            "show_rating": true,
+            "rating": 5,
+            "author": "Prénom N.",
+            "title": "Titre de l'avis",
+            "content": "<p>Remplacez par un avis client réel.</p>"
+          }
+        },
+        "testimonial_L48Gh8": {
+          "type": "testimonial",
+          "settings": {
+            "image": "",
+            "round_avatar": true,
+            "show_rating": true,
+            "rating": 4,
+            "author": "Prénom N.",
+            "title": "Titre de l'avis",
+            "content": "<p>Remplacez par un avis client réel.</p>"
+          }
+        },
+        "testimonial_PabDh6": {
+          "type": "testimonial",
+          "settings": {
+            "image": "",
+            "round_avatar": true,
+            "show_rating": true,
+            "rating": 5,
+            "author": "Prénom N.",
+            "title": "Titre de l'avis",
+            "content": "<p>Remplacez par un avis client réel.</p>"
+          }
+        },
+        "testimonial_KAiN8V": {
+          "type": "testimonial",
+          "settings": {
+            "image": "",
+            "round_avatar": true,
+            "show_rating": true,
+            "rating": 4,
+            "author": "Prénom N.",
+            "title": "Titre de l'avis",
+            "content": "<p>Remplacez par un avis client réel.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_eQz4RG",
+        "testimonial_yQbxRY",
+        "testimonial_L48Gh8",
+        "testimonial_PabDh6",
+        "testimonial_KAiN8V"
+      ],
+      "disabled": true,
+      "settings": {
+        "full_width": true,
+        "stack_testimonials": false,
+        "subheading": "",
+        "title": "Ce que nos clientes en disent",
+        "content": "",
+        "link_url": "",
+        "link_text": "",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_color": "",
+        "heading_gradient": "",
+        "testimonial_card_background": "",
+        "testimonial_card_text_color": ""
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "recommendations_count": 10,
+        "products": [],
+        "full_width": true,
+        "stack_products": false,
+        "show_progress_bar": false,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "subheading": "",
+        "title": "Nos coups de cœur du moment",
+        "content": "<p>-10 % à l'achat de 2 articles, -15 % pour 3, -20 % pour 4.</p>",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "#0B1F3A",
+        "heading_color": "",
+        "heading_gradient": "",
+        "product_card_background": "",
+        "product_card_text_color": ""
+      }
+    },
+    "faq_Ckre9e": {
+      "type": "faq",
+      "blocks": {
+        "item_iJ886e": {
+          "type": "item",
+          "settings": {
+            "title": "Comment trouver ma taille?",
+            "content": "<p>Consultez le guide des tailles sur chaque fiche produit. Si vous hésitez entre deux tailles, on vous conseille de prendre la plus grande. Un doute? Écrivez-nous, ça nous fait plaisir de vous aider.</p>"
+          }
+        },
+        "item_3fMRXB": {
+          "type": "item",
+          "settings": {
+            "title": "Quels sont les délais de livraison?",
+            "content": "<p>La plupart des commandes arrivent en 7 à 12 jours ouvrables. Vous recevez un lien de suivi par courriel dès que votre colis est expédié.</p>"
+          }
+        },
+        "item_gLBa6c": {
+          "type": "item",
+          "settings": {
+            "title": "Puis-je retourner un article?",
+            "content": "<p>Oui. Vous avez 30 jours suivant la réception pour retourner un article et obtenir un remboursement complet.</p>"
+          }
+        },
+        "item_6KgxY4": {
+          "type": "item",
+          "settings": {
+            "title": "Le paiement est-il sécurisé?",
+            "content": "<p>Oui. Tous les paiements sont cryptés et traités de façon sécurisée. Vos informations de carte de crédit ne sont jamais conservées.</p>"
+          }
+        },
+        "item_Qaz9Fi": {
+          "type": "item",
+          "settings": {
+            "title": "Mon article préféré est en rupture de stock, que faire?",
+            "content": "<p>Inscrivez-vous sur la fiche produit pour être avisé(e) dès son retour en stock, ou contactez-nous pour une alternative.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "item_iJ886e",
+        "item_3fMRXB",
+        "item_gLBa6c",
+        "item_6KgxY4",
+        "item_Qaz9Fi"
+      ],
+      "settings": {
+        "full_width": true,
+        "subheading": "",
+        "title": "Questions fréquentes",
+        "content": "",
+        "team_avatar_width": 160,
+        "support_hours": "Une autre question? Écrivez-nous à service@votremarque.ca",
+        "answer_time": "",
+        "button_text": "",
+        "button_url": "",
+        "text_position": "start",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_color": "",
+        "heading_gradient": "",
+        "button_background": "#EEF2F8",
+        "button_text_color": "#EEF2F8",
+        "accordion_background": "#EEF2F8",
+        "accordion_text_color": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "testimonials_mKJMCa",
+    "related-products",
+    "faq_Ckre9e"
+  ]
+}
